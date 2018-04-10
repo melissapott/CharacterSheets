@@ -1,0 +1,66 @@
+from sqlalchemy import Column, ForeignKey, Integer, String, Enum
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship
+from sqlalchemy import create_engine
+import psycopg2
+
+Base = declarative_base()
+
+# define database tables
+class Person(Base):
+	__tablename__ = 'person'
+	id = Column(Integer, primary_key = True)
+	name = Column(String(250), nullable = False)
+	email = Column(String(250))
+	type = Column(Enum("GM", "Staff", "Player", name = "player_type_enum", create_type = False))
+
+	@property
+	def serialize(self):
+	#this will be used for returning a JSON object
+		return {
+			'id': self.id,
+			'name' : self.name,
+			'email' : self.email,
+			'type' : self.type
+		}
+
+class Character(Base):
+	__tablename__ = 'character'
+	id = Column(Integer, primary_key = True)
+	person_id = Column(Integer, ForeignKey('person.id'))
+	name = Column(String(250), nullable = False)
+	race = Column(Integer, ForeignKey('race.id'))
+
+
+class Race(Base):
+	__tablename__ = 'race'
+	id = Column(Integer, primary_key = True)
+	name = Column(String(100), nullable = False)
+
+	@property
+	def serialize(self):
+		return {
+			'id' : self.id,
+			'name' : self.name
+		}
+
+class Faction(Base):
+	__tablename__ = 'faction'
+	id = Column(Integer, primary_key = True)
+	race_id = Column(Integer, ForeignKey('race.id'))
+	name = Column(String(100), nullable = False)
+
+	@property
+	def serialize(self):
+		return {
+			'id' : self.id,
+			'race_id' : self.race_id
+			'name' : self.name
+		}
+
+
+
+
+engine = create_engine('postgresql://dbname:dbuserpass@localhost/catalog')
+
+Base.metadata.create_all(engine)
