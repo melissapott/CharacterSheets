@@ -30,6 +30,7 @@ class Character(Base):
 	person_id = Column(Integer, ForeignKey('person.id'))
 	name = Column(String(250), nullable = False)
 	race = Column(Integer, ForeignKey('race.id'))
+	concept = Column(String(250), nullable = True)
 
 
 class Race(Base):
