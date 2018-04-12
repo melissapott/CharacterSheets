@@ -54,13 +54,13 @@ class Faction(Base):
 	def serialize(self):
 		return {
 			'id' : self.id,
-			'race_id' : self.race_id
+			'race_id' : self.race_id,
 			'name' : self.name
 		}
 
 
 
 
-engine = create_engine('postgresql://dbname:dbuserpass@localhost/catalog')
+engine = create_engine('postgresql://charsheet:4ab62xxc@localhost/charsheet')
 
 Base.metadata.create_all(engine)
