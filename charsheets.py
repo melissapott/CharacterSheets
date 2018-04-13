@@ -5,8 +5,7 @@ from flask import make_response, send_file, flash
 from flask import session as login_session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from database_setup import Base, User, Category, Item
-import psycopg2
+from database_setup import Base, Person, Character, Race, Faction
 
 
 app = Flask(__name__)
