@@ -25,6 +25,16 @@ session = DBSession()
 def home():
     return render_template('home.html')
 
+# Page to log users in
+@app.route('/login')
+def showLogin():
+    # add code to log in user
+    pass
+# Logout page
+@app.route('/logout')
+def logout():
+    # add code here to log out users
+    pass
 
 
 
