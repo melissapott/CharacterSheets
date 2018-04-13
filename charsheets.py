@@ -23,9 +23,7 @@ session = DBSession()
 # Show the main page
 @app.route('/')
 def home():
-    categories = session.query(Category)
-    return render_template('home.html', categories=categories,
-                           user_status=userStatus())
+    return render_template('home.html')
 
 
 
