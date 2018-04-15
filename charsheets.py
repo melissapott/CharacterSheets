@@ -40,7 +40,7 @@ def logout():
 @app.route('/person/add')
 def addPerson():
     #TO DO:  restrict this route for anyone other than logged in users Staff or higher
-    if request.method == 'POST';
+    if request.method == 'POST':
         newPerson = Person(fname=request.form['fname'], lname=request.form['lname'], email=request.form['email'], type=request.form['type'])
         session.add(newPerson)
         session.commit()
@@ -49,6 +49,26 @@ def addPerson():
     else:
         return render_template('addperson.html')
 
+# Edit users page
+@app.route('/person/<int:person_id>/edit')
+def editPerson(person_id):
+
+    #TO DO: restrict this route for anyone other than logged in users
+    person = session.query(Person).filter_by(id=person_id).one()
+
+    if request.method == 'POST':
+        person.fname = request.form['fname']
+        person.lname = request.form['lname']
+        person.email = request.form['email']
+        person.type = request.form['type']
+        session.add(person)
+        session.commit()
+        flash('Person %s has been edited!' % person.fname)
+
+        return redirect(url_for ('home'))
+
+    else:
+        return render_template('editperson.html')
 
 
 if __name__ == '__main__':
