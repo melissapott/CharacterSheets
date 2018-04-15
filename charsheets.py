@@ -36,6 +36,19 @@ def logout():
     # add code here to log out users
     pass
 
+# Add users page
+@app.route('/person/add')
+def addPerson():
+    #TO DO:  restrict this route for anyone other than logged in users Staff or higher
+    if request.method == 'POST';
+        newPerson = Person(fname=request.form['fname'], lname=request.form['lname'], email=request.form['email'], type=request.form['type'])
+        session.add(newPerson)
+        session.commit()
+        flash("New Person %s has been created!" % newPerson.fname)
+        return redirect(url_for ('home'))
+    else:
+        return render_template('addperson.html')
+
 
 
 if __name__ == '__main__':

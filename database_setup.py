@@ -10,7 +10,8 @@ Base = declarative_base()
 class Person(Base):
 	__tablename__ = 'person'
 	id = Column(Integer, primary_key = True)
-	name = Column(String(250), nullable = False)
+	fname = Column(String(250), nullable = False)
+	lname = Column(String(250), nullable = False)
 	email = Column(String(250))
 	type = Column(Enum("GM", "Staff", "Player", name = "player_type_enum", create_type = False))
 
