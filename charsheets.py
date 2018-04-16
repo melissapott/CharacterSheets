@@ -37,7 +37,7 @@ def logout():
     pass
 
 # Add users page
-@app.route('/person/add')
+@app.route('/person/add', methods=['GET', 'POST'])
 def addPerson():
     #TO DO:  restrict this route for anyone other than logged in users Staff or higher
     if request.method == 'POST':
@@ -50,7 +50,7 @@ def addPerson():
         return render_template('addperson.html')
 
 # Edit users page
-@app.route('/person/<int:person_id>/edit')
+@app.route('/person/<int:person_id>/edit', methods=['GET', 'POST'])
 def editPerson(person_id):
 
     #TO DO: restrict this route for anyone other than logged in users
@@ -68,7 +68,6 @@ def editPerson(person_id):
         return redirect(url_for ('home'))
 
     else:
-        return render_template('editperson.html')
 
 
 if __name__ == '__main__':
