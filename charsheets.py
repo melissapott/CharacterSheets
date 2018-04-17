@@ -7,7 +7,6 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Person, Character, Race, Faction
 
-
 app = Flask(__name__)
 
 
@@ -41,7 +40,7 @@ def logout():
 def addPerson():
     #TO DO:  restrict this route for anyone other than logged in users Staff or higher
     if request.method == 'POST':
-        newPerson = Person(fname=request.form['fname'], lname=request.form['lname'], email=request.form['email'], type=request.form['type'])
+        newPerson = Person(fname=request.form['fname'], lname=request.form['lname'], email=request.form['email'], status=request.form['status'])
         session.add(newPerson)
         session.commit()
         flash("New Person %s has been created!" % newPerson.fname)
@@ -50,17 +49,17 @@ def addPerson():
         return render_template('addperson.html')
 
 # Edit users page
-@app.route('/person/<int:person_id>/edit', methods=['GET', 'POST'])
-def editPerson(person_id):
+@app.route('/person/<int:id>/edit', methods=['GET', 'POST'])
+def editPerson(id):
 
     #TO DO: restrict this route for anyone other than logged in users
-    person = session.query(Person).filter_by(id=person_id).one()
+    person = session.query(Person).filter_by(id=id).one()
 
     if request.method == 'POST':
         person.fname = request.form['fname']
         person.lname = request.form['lname']
         person.email = request.form['email']
-        person.type = request.form['type']
+	person.status = request.form['status']
         session.add(person)
         session.commit()
         flash('Person %s has been edited!' % person.fname)
@@ -68,7 +67,7 @@ def editPerson(person_id):
         return redirect(url_for ('home'))
 
     else:
-
+	return render_template('editperson.html')
 
 if __name__ == '__main__':
     app.secret_key = 'blahblahblah'

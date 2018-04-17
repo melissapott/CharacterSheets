@@ -13,7 +13,7 @@ class Person(Base):
 	fname = Column(String(250), nullable = False)
 	lname = Column(String(250), nullable = False)
 	email = Column(String(250))
-	type = Column(Enum("GM", "Staff", "Player", name = "player_type_enum", create_type = False))
+	status = Column(String(10))
 
 	@property
 	def serialize(self):
@@ -22,7 +22,7 @@ class Person(Base):
 			'id': self.id,
 			'name' : self.name,
 			'email' : self.email,
-			'type' : self.type
+			'status' : self.status
 		}
 
 class Character(Base):
