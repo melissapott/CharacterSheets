@@ -48,6 +48,12 @@ def addPerson():
     else:
         return render_template('addperson.html')
 
+# List users page
+@app.route('/person/list', methods=['GET'])
+def listPerson():
+    person = session.query(Person)
+    return render_template('listperson.html', person=person)
+
 # Edit users page
 @app.route('/person/<int:id>/edit', methods=['GET', 'POST'])
 def editPerson(id):
@@ -67,7 +73,7 @@ def editPerson(id):
         return redirect(url_for ('home'))
 
     else:
-	return render_template('editperson.html')
+	return render_template('editperson.html', person=person)
 
 if __name__ == '__main__':
     app.secret_key = 'blahblahblah'

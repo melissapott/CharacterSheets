@@ -1,0 +1,15 @@
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+
+<div class = "row full-row title-row">
+	<h2> List of People </h2>
+</div>
+
+{% for p in person %}
+	<div class="col-sm-4"> {{p.fname}} </div>
+	<div class="col-sm-4"> {{p.lname}} </div>
+	<div class="col-sm-4"> {{p.email}} </div>
+{% endfor %}
+
+{% endblock %}

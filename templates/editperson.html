@@ -16,11 +16,12 @@
 	</div>
 	<div class="form-group">
 		<select>
-			<option value="GM">GM - Super User</option>
-			<option value="Staff">Staff</option>
-			<option value="Player">Player</option>
+			<option value="GM"{% if person.status=='GM' %} selected="selected" {% endif %}>GM - Super User</option>
+			<option value="Staff"{% if person.status=='Staff' %} selected="selected" {% endif %}>Staff</option>
+			<option value="Player"{% if person.status=='Player' %} selected="selected" {% endif %}>Player</option>
 		</select>
 	</div>
+	
 	<div class="form-group">
 		<input type="submit" class="btn btn-default" value="Submit">
 	</div>
