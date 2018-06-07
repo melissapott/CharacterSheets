@@ -110,91 +110,6 @@ def showLogin():
     return render_template('login.html', STATE=state)
 
 
-# Google Login
-@app.route('/gconnect', methods=['POST'])
-def gConnect():
-    # Validate state token - check for hijack
-    if request.args.get('state') != login_session['state']:
-        response = make_response(json.dumps('Invalid state parameter.'), 401)
-        response.headers['Content-Type'] = 'application/json'
-        return response
-
-    # Obtain authorization code - obtained from javascript in login.html
-    code = request.data
-
-    try:
-        # exchange the authorization code for a credentials object
-        oauth_flow = flow_from_clientsecrets('/var/www/Catalog/client_secrets.json', scope='')
-        oauth_flow.redirect_uri = 'postmessage'
-        credentials = oauth_flow.step2_exchange(code)
-    except:
-        response = make_response(json.dumps('authorization unsucessful'), 401)
-        response.headers['Content-Type'] = 'application/json'
-        return response
-
-    access_token = credentials.access_token
-
-    # check that the access token we got is valid
-    url = ('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s'
-           % access_token)
-    h = httplib2.Http()
-    result = json.loads(h.request(url, 'GET')[1])
-
-    if result.get('error') is not None:
-        response = make_response(json.dumps("result.get('error')"), 500)
-        response.headers['Content-Type'] = 'application/json'
-        return response
-
-    # is the access token issued for the intended user?
-    g_id = credentials.id_token['sub']
-    if result['user_id'] != g_id:
-        response = make_response(json.dumps(
-            "Token ID doesn't match User"), 401)
-        response.headers['Content-Type'] = 'application/json'
-        return response
-
-    # is the access token valid for this application?
-    if result['issued_to'] != CLIENT_ID:
-        response = make_response(json.dumps(
-            "token not valid for this app"), 401)
-        response.headers['Content-Type'] = 'application/json'
-        return response
-
-    # is the user already logged in?
-    stored_credentials = login_session.get('credentials')
-    stored_g_id = login_session.get('g_id')
-    if stored_credentials is not None and g_id == stored_g_id:
-        response = make_response(json.dumps('user is already logged in'), 200)
-        response.headers['Content-Type'] = 'application/json'
-        return response
-
-    # everything checks out, so save the credentials to the session
-    login_session['credentials'] = credentials.access_token
-    login_session['g_id'] = g_id
-
-    # get the user info from the Google API
-    userinfo_url = "https://www.googleapis.com/oauth2/v1/userinfo"
-    params = {'access_token': credentials.access_token, 'alt': 'json'}
-    reply = requests.get(userinfo_url, params=params)
-    data = reply.json()
-
-    login_session['provider'] = 'google'
-    login_session['username'] = data['name']
-    login_session['email'] = data['email']
-
-    # does the user already exist in the database?  If not, create a new user
-    # entry
-    user_id = getUserID(login_session['email'])
-    if not user_id:
-        user_id = createUser(login_session)
-    login_session['user_id'] = user_id
-
-    output = ''
-    output += '<h2>Welcome, '
-    output += login_session['username']
-    output += '!</h2>'
-    flash("You are now logged in as %s" % login_session['username'])
-    return output
 
 # Facebook Login
 @app.route('/fbconnect', methods=['POST'])
@@ -207,9 +122,9 @@ def fbconnect():
     access_token = request.data
     # Exchange client token for long-lived server-side token
 
-    app_id = json.loads(open('/var/www/Catalog/fb_client_secrets.json',
+    app_id = json.loads(open('/var/www/CharacterSheets/fb_client_secrets.json',
                              'r').read())['web']['app_id']
-    app_secret = json.loads(open('/var/www/Catalog/fb_client_secrets.json',
+    app_secret = json.loads(open('/var/www/CharacterSheets/fb_client_secrets.json',
                                  'r').read())['web']['app_secret']
 
     url = ('https://graph.facebook.com/v2.9/oauth/access_token?'
@@ -224,31 +139,39 @@ def fbconnect():
     token = 'access_token=' + data['access_token']
  
     # use token to get user infor from API
-    url = 'https://graph.facebook.com/v2.9/me?%s&fields=name,id,email' % token
+    url = 'https://graph.facebook.com/v2.9/me?%s&fields=name,id,email,first_name,last_name' % token
     h = httplib2.Http()
     result = h.request(url, 'GET')[1]
     data = json.loads(result)
     login_session['provider'] = 'facebook'
-    login_session['username'] = data['name']
+    login_session['fname'] = data['first_name']
+    login_session['lname'] = data['last_name']
     login_session['facebook_id'] = data["id"]
     login_session['email'] = data['email']
 
     # see if user exists
     user_id = getUserID(login_session['email'])
     if not user_id:
-        user_id = createUser(login_session)
+        user_id = createPerson(login_session)
     login_session['user_id'] = user_id
 
     output = ''
     output += '<h1>Welcome, '
-    output += login_session['username']
+    output += login_session['fname']
     output += '!</h1>'
 
-    flash("You are now logged in as %s" % login_session['username'])
+    flash("You are now logged in as %s" % login_session['fname'])
     return output
 
 
 
+def createPerson(login_session):
+    newUser = Person(fname=login_session[
+                   'fname'], lname=login_session['lname'], email=login_session['email'])
+    session.add(newUser)
+    session.commit()
+    user = session.query(Person).filter_by(email=login_session['email']).one()
+    return user.id
 
 # Disconnect from either Facebook or Google
 @app.route('/logout')
