@@ -68,7 +68,22 @@ def editPerson(id):
         return redirect(url_for ('home'))
 
     else:
-	return render_template('editperson.html', person=person)
+        return render_template('editperson.html', person=person)
+
+@app.route('/person/,int:id>/delete', methods=['GET', 'POST'])
+def deletePerson(id):
+    #TO DO:  restrict this route for anyone other than authorized users
+    person = session.query(Person).filter_by(id=id).one()
+
+    if request.method == 'POST':
+        session.delete(person)
+        session.commit()
+        flash("The user has been deleted.")
+        return redirect(url_for('home'))
+
+    else:
+        return render_template('deleteperson.html', person=person)
+
 
 # code for dealing with logging users in and out
 # from Udacity Authorization and Authentication class
@@ -138,7 +153,7 @@ def fbconnect():
 
     # Extract the access token from response
     token = 'access_token=' + data['access_token']
- 
+
     # use token to get user infor from API
     url = 'https://graph.facebook.com/v2.9/me?%s&fields=name,id,email,first_name,last_name' % token
     h = httplib2.Http()
