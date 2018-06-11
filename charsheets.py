@@ -70,7 +70,7 @@ def editPerson(id):
     else:
         return render_template('editperson.html', person=person)
 
-@app.route('/person/,int:id>/delete', methods=['GET', 'POST'])
+@app.route('/person/<int:id>/delete', methods=['GET', 'POST'])
 def deletePerson(id):
     #TO DO:  restrict this route for anyone other than authorized users
     person = session.query(Person).filter_by(id=id).one()
