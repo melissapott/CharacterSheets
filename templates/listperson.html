@@ -1,0 +1,20 @@
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+
+<div class = "row full-row title-row">
+	<h2> List of People </h2>
+</div>
+
+
+{% for p in person %}
+	<div class="col-sm-3">{{p.lname}}, {{p.fname}}</div>
+	<div class="col-sm-3"> {{p.email}} </div>
+	<div class="col-sm-3"> {{p.status}} </div>
+	<div class="col-sm-3">
+		<a href="/person/{{p.id}}/edit"><span class="glyphicon glyphicon-edit"></span></a>
+		<a href="/person/{{p.id}}/delete"><span class="glyphicon glyphicon-trash"></span></a>
+	</div>
+{% endfor %}
+
+{% endblock %}
