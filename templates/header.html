@@ -7,13 +7,13 @@
 	</div>
 	<div class="col-sm-4 user" align="center">
 		<!-- Determine if the user is logged in or not, and show appropriate link -->
-		{% if 'username' in session %}
+		{% if 'fname' in session %}
 			<span class="glyphicon glyphicon-user"></span>
-			{{ session.username }}
+			{{ session.fname }}
 		{% endif %}
 	</div>
 	<div class="col-sm-4 login" align="right">
-		{% if 'username' in session %}
+		{% if 'fname' in session %}
 			<a href="{{url_for('logout')}}" class="btn btn-default">
 				<span class="glyphicon glyphicon-log-out"></span>
 				Log Out

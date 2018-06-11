@@ -60,6 +60,7 @@ def editPerson(id):
         person.fname = request.form['fname']
         person.lname = request.form['lname']
         person.email = request.form['email']
+	person.status = request.form['status']
 	session.add(person)
         session.commit()
         flash('Person %s has been edited!' % person.fname)
@@ -167,7 +168,7 @@ def fbconnect():
 
 def createPerson(login_session):
     newUser = Person(fname=login_session[
-                   'fname'], lname=login_session['lname'], email=login_session['email'])
+                   'fname'], lname=login_session['lname'], email=login_session['email'], status='Player')
     session.add(newUser)
     session.commit()
     user = session.query(Person).filter_by(email=login_session['email']).one()

@@ -15,7 +15,7 @@
 		<input type="text" class="form-control" name="email" value="{{person.email}}">
 	</div>
 	<div class="form-group">
-		<select>
+		<select name="status">
 			<option value="GM"{% if person.status=='GM' %} selected="selected" {% endif %}>GM - Super User</option>
 			<option value="Staff"{% if person.status=='Staff' %} selected="selected" {% endif %}>Staff</option>
 			<option value="Player"{% if person.status=='Player' %} selected="selected" {% endif %}>Player</option>

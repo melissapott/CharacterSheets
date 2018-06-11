@@ -5,11 +5,16 @@
 <div class = "row full-row title-row">
 	<h2> List of People </h2>
 </div>
+<div class = "row full-row">click to edit - to do:  button graphics?</div>
 
 {% for p in person %}
-	<div class="col-sm-4"> {{p.fname}} </div>
-	<div class="col-sm-4"> {{p.lname}} </div>
-	<div class="col-sm-4"> {{p.email}} </div>
+	<div class="col-sm-3">{{p.lname}}, {{p.fname}}</div>
+	<div class="col-sm-3"> {{p.email}} </div>
+	<div class="col-sm-3"> {{p.status}} </div>
+	<div class="col-sm-3">
+		<a href="/person/{{p.id}}/edit"><span class="glyphicon glyphicon-edit"></span></a>
+		<a href=""><span class="glyphicon glyphicon-trash"></span></a>
+	</div>
 {% endfor %}
 
 {% endblock %}
