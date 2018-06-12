@@ -30,7 +30,7 @@ def home():
     return render_template('home.html')
 
 # Manage Races Page
-@app.route('races/manage', methods=['GET', 'POST'])
+@app.route('/races/manage', methods=['GET', 'POST'])
 def manageRaces():
     races = session.query(Race)
 
@@ -42,7 +42,8 @@ def manageRaces():
         return render_template('manageraces.html', races=races)
     else:
         return render_template('manageraces.html', races=races)
-        
+
+
 # Add users page
 @app.route('/person/add', methods=['GET', 'POST'])
 def addPerson():
