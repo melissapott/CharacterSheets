@@ -5,13 +5,22 @@
 	<h2>Main Page</h2>
 </div>
 <ul>
-	<li> <a href="{{url_for('listPerson')}}">List of users</a> </li>
+	<li> <a href="{{url_for('listPerson')}}">List users</a> </li>
 	<li> <a href="{{url_for('addPerson')}}">Add User</a> </li>
+	<li> <a href="{{url_for('manageRaces')}}">Manage Races</a></li>
 </ul>
 
 
 
-	<h2>To Do:  get text for non - logged in users vs. logged in users</h2>
+	<h2>To Do:  </h2>
+	<ul>
+		<li>Main text for this page (dep. on user type)</li>
+		<li>Mockup/style changes for game "timejump" (Phil)</li>
+		<li>Restrict pages based on logged in user type</li>
+		<li>Phil - do "factions" depend on races?</li>
+
+	</ul>
+
 
 
 {% endblock %}

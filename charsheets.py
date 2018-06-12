@@ -29,7 +29,20 @@ session = DBSession()
 def home():
     return render_template('home.html')
 
+# Manage Races Page
+@app.route('races/manage', methods=['GET', 'POST'])
+def manageRaces():
+    races = session.query(Race)
 
+    if request.method == 'POST':
+        newRace = Race(name=request.form['name'])
+        session.add(newRace)
+        session.commit
+        flash("New Race %s has been created!" % newRace.name)
+        return render_template('manageraces.html', races=races)
+    else:
+        return render_template('manageraces.html', races=races)
+        
 # Add users page
 @app.route('/person/add', methods=['GET', 'POST'])
 def addPerson():
