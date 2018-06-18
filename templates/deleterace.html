@@ -1,0 +1,19 @@
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+
+<div class = "row full-row title-row">
+	<h2>Delete Race "{{race.name}}"</h2>
+</div>
+
+<form action="#" method="post" enctype=multipart/form-data>
+You are about to delete the race called "{{race.name}}".
+This cannot be un-done.  Please be sure you want to continure.
+
+	<div class="form-group">
+		<input type="submit" class="btn btn-default" value="Delete">
+	</div>
+</form>
+<a href="{{url_for('manageRaces')}}" class="btn btn-default">Cancel</a>
+
+{% endblock %}
