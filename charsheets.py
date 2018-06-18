@@ -30,19 +30,54 @@ def home():
     return render_template('home.html')
 
 # Manage Races Page
-@app.route('/races/manage', methods=['GET', 'POST'])
+@app.route('/races/manage', methods=['GET'])
 def manageRaces():
     races = session.query(Race)
+    return render_template('manageraces.html', races=races)
+
+# Edit races page
+@app.route('/race/<int:id>/edit', methods=['GET', 'POST'])
+def editRace(id):
+
+    #TO DO: restrict this route for anyone other than logged in users
+    race = session.query(Race).filter_by(id=id).one()
 
     if request.method == 'POST':
-        newRace = Race(name=request.form['name'])
-        session.add(newRace)
-        session.commit
-        flash("New Race %s has been created!" % newRace.name)
-        return render_template('manageraces.html', races=races)
-    else:
-        return render_template('manageraces.html', races=races)
+        race.name = request.form['race']
+        session.add(race)
+        session.commit()
+        flash('Race %s has been edited!' % race.name)
 
+        return redirect(url_for ('manageRaces'))
+    else:
+        return render_template('editrace.html', race=race)
+
+# Delete a Race
+@app.route('/race/<int:id>/delete', methods=['GET', 'POST'])
+def deleteRace(id):
+    #TO DO:  restrict this route for anyone other than authorized users
+    race = session.query(Race).filter_by(id=id).one()
+
+    if request.method == 'POST':
+        session.delete(race)
+        session.commit()
+        flash("The race has been deleted.")
+        return redirect(url_for('manageRaces'))
+
+    else:
+        return render_template('deleterace.html', race=race)
+
+# Add Race Page
+@app.route('/race/add', methods=['GET', 'POST'])
+def addRace():
+    if request.method == 'POST':
+        newRace = Race(name=request.form['race'])
+        session.add(newRace)
+        session.commit()
+        flash("New Race %s has been created!" % newRace.name)
+        return redirect(url_for ('manageRaces'))
+    else:
+        return render_template('addrace.html')
 
 # Add users page
 @app.route('/person/add', methods=['GET', 'POST'])
@@ -256,3 +291,4 @@ if __name__ == '__main__':
     app.secret_key = 'blahblahblah'
     app.debug = True
     app.run(host='0.0.0', port=8000)
+
