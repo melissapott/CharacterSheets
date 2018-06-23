@@ -60,8 +60,31 @@ class Faction(Base):
 			'name' : self.name
 		}
 
+class Ability(Base):
+	__tablename__ = 'ability'
+	id = Column(Integer, primary_key = True)
+	type = Column(String(100), nullable = False)
+	name = Column(String(100), nullable = False)
 
+	@property
+	def serialize(self):
+		return {
+			'id' : self.id,
+			'type' : self.type,
+			'name' : self.name
+		}
 
+class Attribute(Base):
+	__tablename__ = 'attribute'
+	id = Column(Integer, primary_key = True)
+	name = Column(String(100), nullable = False)
+
+	@property
+	def serialize(self):
+		return {
+			'id' : self.id,
+			'name' : self.name
+		}
 
 engine = create_engine('postgresql://charsheet:4ab62xxc@localhost/charsheet')
 
