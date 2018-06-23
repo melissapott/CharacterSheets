@@ -4,6 +4,7 @@ from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
 import psycopg2
 from database_setup import Base, Person, Character, Race, Faction, Ability, Attribute
+from sqlalchemy.orm import sessionmaker
 
 # Set up a connection to the database
 engine = create_engine('postgresql://charsheet:4ab62xxc@localhost/charsheet')
