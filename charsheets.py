@@ -5,7 +5,7 @@ from flask import make_response, send_file, flash
 from flask import session as login_session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from database_setup import Base, Person, Character, Race, Faction
+from database_setup import Base, Person, Character, Race, Faction, Ability, Attribute
 import random, string, json
 from oauth2client.client import flow_from_clientsecrets, FlowExchangeError
 import httplib2, requests, os, sys, psycopg2

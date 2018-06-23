@@ -3,6 +3,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
 import psycopg2
+from database_setup import Base, Person, Character, Race, Faction, Ability, Attribute
 
 # Set up a connection to the database
 engine = create_engine('postgresql://charsheet:4ab62xxc@localhost/charsheet')
