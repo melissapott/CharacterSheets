@@ -29,6 +29,26 @@ session = DBSession()
 def home():
     return render_template('home.html')
 
+# List characters page
+@app.route('/character/list', methods=['GET'])
+def listCharacter():
+    character = session.query(Character).join(Race)
+    return render_template('listcharacter.html', character=character)
+
+
+# Add Character page
+@app.route('/character/add', methods=['GET', 'POST'])
+def addCharacter():
+    races = session.query(Race)
+    if request.method == 'POST':
+        newCharacter = Character(name=request.form['name'], race_id=request.form['race'], concept=request.form['concept'])
+        session.add(newCharacter)
+        session.commit()
+        flash('Character %s has been added!' % newCharacter.name)
+        return redirect(url_for ('listCharacter'))
+    else:
+        return render_template('addcharacter.html', races=races)
+
 # Manage Races Page
 @app.route('/races/manage', methods=['GET'])
 def manageRaces():

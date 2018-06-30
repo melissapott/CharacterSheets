@@ -15,50 +15,27 @@ class Person(Base):
 	email = Column(String(250))
 	status = Column(String(10))
 
-	@property
-	def serialize(self):
-	#this will be used for returning a JSON object
-		return {
-			'id': self.id,
-			'name' : self.name,
-			'email' : self.email,
-			'status' : self.status
-		}
+class Race(Base):
+	__tablename__ = 'race'
+	id = Column(Integer, primary_key = True)
+	name = Column(String(100), nullable = False)
 
 class Character(Base):
 	__tablename__ = 'character'
 	id = Column(Integer, primary_key = True)
 	person_id = Column(Integer, ForeignKey('person.id'))
 	name = Column(String(250), nullable = False)
-	race = Column(Integer, ForeignKey('race.id'))
+	race_id = Column(Integer, ForeignKey('race.id'))
 	concept = Column(String(250), nullable = True)
-
-
-class Race(Base):
-	__tablename__ = 'race'
-	id = Column(Integer, primary_key = True)
-	name = Column(String(100), nullable = False)
-
-	@property
-	def serialize(self):
-		return {
-			'id' : self.id,
-			'name' : self.name
-		}
+	person = relationship(Person)
+	race = relationship(Race)
 
 class Faction(Base):
 	__tablename__ = 'faction'
 	id = Column(Integer, primary_key = True)
 	race_id = Column(Integer, ForeignKey('race.id'))
 	name = Column(String(100), nullable = False)
-
-	@property
-	def serialize(self):
-		return {
-			'id' : self.id,
-			'race_id' : self.race_id,
-			'name' : self.name
-		}
+	race = relationship(Race)
 
 class Ability(Base):
 	__tablename__ = 'ability'
@@ -66,25 +43,12 @@ class Ability(Base):
 	type = Column(String(100), nullable = False)
 	name = Column(String(100), nullable = False)
 
-	@property
-	def serialize(self):
-		return {
-			'id' : self.id,
-			'type' : self.type,
-			'name' : self.name
-		}
 
 class Attribute(Base):
 	__tablename__ = 'attribute'
 	id = Column(Integer, primary_key = True)
 	name = Column(String(100), nullable = False)
 
-	@property
-	def serialize(self):
-		return {
-			'id' : self.id,
-			'name' : self.name
-		}
 
 engine = create_engine('postgresql://charsheet:4ab62xxc@localhost/charsheet')
 

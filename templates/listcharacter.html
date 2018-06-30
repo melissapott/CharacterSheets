@@ -1,0 +1,20 @@
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+
+<div class = "row full-row title-row">
+	<h2> List of Characters </h2>
+</div>
+
+
+{% for c in character %}
+	<div class="col-sm-3">{{c.name}}</div>
+	<div class="col-sm-3"> {{c.race.name}}</div>
+	<div class="col-sm-3"> {{c.concept}} </div>
+	<div class="col-sm-3">
+		<a href=#><span class="glyphicon glyphicon-edit"></span></a>
+		<a href=#><span class="glyphicon glyphicon-trash"></span></a>
+	</div>
+{% endfor %}
+
+{% endblock %}
